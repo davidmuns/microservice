@@ -1,6 +1,8 @@
 package com.microservice.userservice.controller;
 
 import com.microservice.userservice.entity.User;
+import com.microservice.userservice.model.Bike;
+import com.microservice.userservice.model.Car;
 import com.microservice.userservice.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +42,25 @@ public class UserController {
         userService.saveUser(newUser);
         return ResponseEntity.ok(newUser);
     }
+    @GetMapping("/car/all/{userId}")
+    public ResponseEntity<List<Car>> getCars(@PathVariable("userId") Integer userId){
+        User user = userService.getUser(userId);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
+        List<Car> cars = userService.getCars(userId);
+        return ResponseEntity.ok(cars);
+    }
+
+    @GetMapping("/bike/all/{userId}")
+    public ResponseEntity<List<Bike>> getBikes(@PathVariable("userId") Integer userId){
+        User user = userService.getUser(userId);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
+        List<Bike> bikes = userService.getBikes(userId);
+        return ResponseEntity.ok(bikes);
+    }
+
+
 }
