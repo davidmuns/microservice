@@ -33,7 +33,7 @@ public class BikeController {
         return ResponseEntity.ok(bike);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Bike> newBike(@RequestBody Bike bike){
         Bike newBike = bike;
         bikeService.saveBike(newBike);
