@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -60,6 +61,38 @@ public class UserController {
         }
         List<Bike> bikes = userService.getBikes(userId);
         return ResponseEntity.ok(bikes);
+    }
+    @GetMapping("/vehicle/all/{userId}")
+    public ResponseEntity<HashMap<String, Object>> getCarsAndBikes(@PathVariable("userId") Integer userId) {
+        User user = userService.getUser(userId);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        HashMap<String, Object> vehicles = userService.getCarsAndBikes(userId);
+        if(vehicles == null){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(vehicles);
+    }
+    @PostMapping("/buycar/{userId}")
+    public ResponseEntity<Car> newCar(@RequestBody Car car, @PathVariable("userId") Integer userId){
+        User user = userService.getUser(userId);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
+        Car newCar = userService.saveCar(userId, car);
+        return ResponseEntity.ok(newCar);
+    }
+
+    @PostMapping("/buybike/{userId}")
+    public ResponseEntity<Bike> newBike(@PathVariable("userId") Integer userId, @RequestBody Bike bike){
+        User user = userService.getUser(userId);
+        if(user == null){
+            return ResponseEntity.notFound().build();
+        }
+        Bike newBike = userService.saveBike(userId, bike);
+        return ResponseEntity.ok(newBike);
     }
 
 
