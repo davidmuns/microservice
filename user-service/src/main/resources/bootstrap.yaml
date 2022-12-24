@@ -11,7 +11,7 @@ spring:
   cloud:
     config:
       enabled: true
-      uri: http://localohost:8081
+      uri: http://localhost:8081
 
 # JPA properties
 # Mostrar queries en consola
