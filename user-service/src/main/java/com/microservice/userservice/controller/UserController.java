@@ -84,7 +84,6 @@ public class UserController {
         Car newCar = userService.saveCar(userId, car);
         return ResponseEntity.ok(newCar);
     }
-
     @PostMapping("/buybike/{userId}")
     public ResponseEntity<Bike> newBike(@PathVariable("userId") Integer userId, @RequestBody Bike bike){
         User user = userService.getUser(userId);

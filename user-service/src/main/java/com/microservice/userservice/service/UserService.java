@@ -1,6 +1,7 @@
 package com.microservice.userservice.service;
 
 
+import com.microservice.userservice.config.RestTemplateConfig;
 import com.microservice.userservice.entity.User;
 import com.microservice.userservice.feignclient.BikeFeignClient;
 import com.microservice.userservice.feignclient.CarFeignClient;
@@ -9,6 +10,8 @@ import com.microservice.userservice.model.Car;
 import com.microservice.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +23,9 @@ public class UserService {
 
     @Autowired
     CarFeignClient carFeignClient;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
     BikeFeignClient bikeFeignClient;
@@ -37,15 +43,13 @@ public class UserService {
     }
 
     public List<Car> getCars(Integer userId) {
-        List<Car> cars = carFeignClient.getCars(userId);
+        List<Car> cars = restTemplate.getForObject("http://car-service/car/all/" + userId, List.class);
         return cars;
     }
-
     public List<Bike> getBikes(Integer userId) {
-        List<Bike> bikes = bikeFeignClient.getBikes(userId);
+        List<Bike> bikes = restTemplate.getForObject("http://bike-service/bike/all/" + userId, List.class);
         return bikes;
     }
-
     public HashMap<String, Object> getCarsAndBikes(Integer userId){
         User user = userRepository.getById(userId);
         HashMap<String, Object> vehicles = new HashMap<>();
