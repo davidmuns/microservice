@@ -12,7 +12,7 @@ spring:
     config:
       enabled: true
       uri: http://localhost:8081
-  
+
   # JPA properties
   # Mostrar queries en consola
   jpa:
@@ -25,3 +25,5 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDB10Dialect
+
+

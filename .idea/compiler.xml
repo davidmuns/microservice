@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bike-service" />
         <module name="user-service" />
-        <module name="car-service" />
         <module name="config-service" />
+        <module name="car-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
