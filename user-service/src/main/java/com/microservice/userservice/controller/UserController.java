@@ -55,10 +55,10 @@ public class UserController {
         List<Car> cars = userService.getCars(userId);
         return ResponseEntity.ok(cars);
     }
-    private ResponseEntity<List<Car>> fallbackMethodGetCars(@PathVariable("userId") Integer userId){
+    private ResponseEntity<List<Car>> fallbackMethodGetCars(@PathVariable("userId") Integer userId, RuntimeException e){
         return new ResponseEntity("El user " + userId + " tiene los coches en el taller.", HttpStatus.OK);
     }
-
+    @CircuitBreaker(name = "bikeCB", fallbackMethod = "fallbackMethodGetBikes")
     @GetMapping("/bike/all/{userId}")
     public ResponseEntity<List<Bike>> getBikes(@PathVariable("userId") Integer userId){
         User user = userService.getUser(userId);
@@ -67,6 +67,9 @@ public class UserController {
         }
         List<Bike> bikes = userService.getBikes(userId);
         return ResponseEntity.ok(bikes);
+    }
+    private ResponseEntity<List<Bike>> fallbackMethodGetBikes(@PathVariable("userId") Integer userId, RuntimeException e){
+        return new ResponseEntity("El user " + userId + " tiene las motos en el taller.", HttpStatus.OK);
     }
     @GetMapping("/vehicle/all/{userId}")
     public ResponseEntity<HashMap<String, Object>> getCarsAndBikes(@PathVariable("userId") Integer userId) {
