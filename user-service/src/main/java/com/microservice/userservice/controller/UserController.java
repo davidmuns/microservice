@@ -71,6 +71,7 @@ public class UserController {
     private ResponseEntity<List<Bike>> fallbackMethodGetBikes(@PathVariable("userId") Integer userId, RuntimeException e){
         return new ResponseEntity("El user " + userId + " tiene las motos en el taller.", HttpStatus.OK);
     }
+    @CircuitBreaker(name = "vehiclesCB", fallbackMethod = "fallbackMethodGetVehicles")
     @GetMapping("/vehicle/all/{userId}")
     public ResponseEntity<HashMap<String, Object>> getCarsAndBikes(@PathVariable("userId") Integer userId) {
         User user = userService.getUser(userId);
@@ -83,6 +84,9 @@ public class UserController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(vehicles);
+    }
+    private ResponseEntity<HashMap<String, Object>> fallbackMethodGetVehicles(@PathVariable("userId") Integer userId,  RuntimeException e) {
+        return new ResponseEntity("El user " + userId + " tiene los vehículos en el taller.", HttpStatus.OK);
     }
     @CircuitBreaker(name = "carCB", fallbackMethod = "fallbackMethodNewCar")
     @PostMapping("/buycar/{userId}")
@@ -97,7 +101,7 @@ public class UserController {
     private ResponseEntity<Car> fallbackMethodNewCar(@RequestBody Car car, @PathVariable("userId") Integer userId, RuntimeException e){
         return new ResponseEntity("El user " + userId + " no tiene dinero para coches.", HttpStatus.OK);
     }
-    @CircuitBreaker(name = "bikeCB", fallbackMethod = "fallbackMethodNewBike")
+    // @CircuitBreaker(name = "bikeCB", fallbackMethod = "fallbackMethodNewBike")
     @PostMapping("/buybike/{userId}")
     public ResponseEntity<Bike> newBike(@PathVariable("userId") Integer userId, @RequestBody Bike bike){
         User user = userService.getUser(userId);
